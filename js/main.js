@@ -1,3 +1,19 @@
+/**
+ * @typedef {Object} Comment
+ * @property {number} id - Уникальный идентификатор комментария, сгенерированный функцией generateCommentId().
+ * @property {string} avatar - Путь к изображению аватара в формате photos/NN.jpg, где NN - случайное число от INITIAL_NUMBER_AVATAR до FINAL_NUMBER_AVATAR.
+ * @property {string} message - Текст комментария, выбранный случайно из массива MESSAGES.
+ * @property {string} name - Имя автора комментария, выбранное случайно из массива NAMES.
+ */
+/**
+ * @typedef {Object} PictureDescription
+ * @property {number} id - Уникальный идентификатор описания, сгенерированный функцией generatePictureId().
+ * @property {string} url - URL пути к изображению в формате photos/NN.jpg, где NN соответствует id.
+ * @property {string} description - Описание фотографии, выбранное случайно из массива DESCRIPTIONS.
+ * @property {number} likes - Количество лайков, случайное число от MIN_LIKES до MAX_LIKES включительно.
+ * @property {Comment[]} comments - Вложенный массив комментариев к фотографии. Типизирован выше как массив объектов Comment.
+ */
+
 export const NAMES = [
   'Liam', 'Yuki', 'Amara', 'Mateo', 'Ahmed', 'Svetlana', 'Hans', 'Diego', 'Ingrid', 'Fatima', 'Zahra',
   'Santiago', 'Mei', 'Nikolai', 'Siobhan'
@@ -79,12 +95,6 @@ export const getRandomArrayElement = (elements) => elements[getRandomInt(0, elem
 
 /**
  * Создает новый комментарий со случайными данными.
- * @typedef {Object} Comment
- * @property {number} id - Уникальный идентификатор комментария, сгенерированный функцией generateCommentId().
- * @property {string} avatar - Путь к изображению аватара в формате photos/NN.jpg, где NN - случайное число от INITIAL_NUMBER_AVATAR до FINAL_NUMBER_AVATAR.
- * @property {string} message - Текст комментария, выбранный случайно из массива MESSAGES.
- * @property {string} name - Имя автора комментария, выбранное случайно из массива NAMES.
- *
  * @returns {Comment} Объект комментария.
  */
 export const createComment = () => ({
@@ -96,13 +106,6 @@ export const createComment = () => ({
 
 /**
  * Генерирует описание фотографии, опубликованной пользователем.
- * @typedef {Object} PictureDescription
- * @property {number} id - Уникальный идентификатор описания, сгенерированный функцией generatePictureId().
- * @property {string} url - URL пути к изображению в формате photos/NN.jpg, где NN соответствует id.
- * @property {string} description - Описание фотографии, выбранное случайно из массива DESCRIPTIONS.
- * @property {number} likes - Количество лайков, случайное число от MIN_LIKES до MAX_LIKES включительно.
- * @property {Comment[]} comments - Вложенный массив комментариев к фотографии. Типизирован выше как массив объектов Comment.
- *
  * @returns {PictureDescription} Объект описания изображения.
  */
 export const generatePictureDescription = () => {
