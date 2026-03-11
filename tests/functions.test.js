@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { isStringLengthValid, isPalindrome, extractNumber } from '../js/functions';
+import { isStringLengthValid, isPalindrome, extractNumber, parseTime, isMeetingInWorkingHours } from '../js/functions';
 
 describe('Does the isStringLengthValid function check for a valid maximum length', () => {
   it('A string of multiple characters, with a length parameter greater than the number of characters', () => {
@@ -70,5 +70,61 @@ describe('Does the extractNumber function extract numbers from a string and retu
   });
   it('A negative fractional number is taken as an argument', () => {
     expect(extractNumber(-10.5)).toBe(105);
+  });
+});
+
+describe('Should the parseTime function ', () => {
+  it('when the standard time format is in the argument', () => {
+    // GIVEN: корректное время
+    const input = '08:05';
+
+    // WHEN: вызов функции
+    const result = parseTime(input);
+
+    // THEN: возвращает минуты
+    expect(result).toBe(8 * 60 + 5);
+  });
+
+  it('when the time format has no leading zeros in the argument', () => {
+    // GIVEN: форматы без ведущих нулей
+    const inputs = ['8:5', '08:5', '9:0'];
+
+    // WHEN & THEN
+    expect(parseTime(inputs[0])).toBe(8 * 60 + 5);
+    expect(parseTime(inputs[1])).toBe(8 * 60 + 5);
+    expect(parseTime(inputs[2])).toBe(9 * 60 + 0);
+  });
+
+  it('when the time format in the argument is incorrect', () => {
+    // GIVEN: некорректные строки
+    const invalid = ['abc', '25:00', '9:60', '9', '09:xx'];
+
+    // WHEN & THEN
+    invalid.forEach((el) => expect(parseTime(el)).toBe(-1));
+  });
+});
+
+describe('Should the isMeetingInWorkingHours function check whether the meeting time is within the working day', () => {
+  it('when is the meeting during business hours', () => {
+    // GIVEN: стандартный день 9-18, встреча c 10:00 на 30 мин
+
+    // WHEN & THEN
+    expect(isMeetingInWorkingHours('09:00', '18:00', '10:00', 30)).toBe(true);
+  });
+
+  it('when the time format in the argument is incorrect', () => {
+    // GIVEN: некорректный формат
+
+    // WHEN & THEN
+    expect(isMeetingInWorkingHours('abc', '18:00', '10:00', 30)).toBe(false);
+  });
+
+  it('when are the boundary cases', () => {
+    // GIVEN: встреча за пределами рабочего дня, форматы без ведущих нулей
+
+    // WHEN & THEN
+    expect(isMeetingInWorkingHours('09:00', '18:00', '17:45', 20)).toBe(false);
+    expect(isMeetingInWorkingHours('8:5', '17:30', '8:05', 60)).toBe(true);
+    expect(isMeetingInWorkingHours('09:00', '18:00', '18:00', 0)).toBe(true);
   });
 });
