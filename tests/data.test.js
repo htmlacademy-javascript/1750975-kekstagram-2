@@ -25,7 +25,7 @@ describe('Does the createComment function create an array object whose values ar
   });
 });
 
-describe('Does the generatePictureDescription function generate an array object whose values are descriptions of the photos posted by the user', () => {
+describe('Does the generatePictureDescription function generate an array object whose values are descriptions of the photos', () => {
   beforeEach(() => {
     // GIVEN: Фиксируем Math.random для воспроизводимых результатов
     vi.spyOn(Math, 'random')

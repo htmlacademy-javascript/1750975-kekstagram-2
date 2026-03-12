@@ -1,4 +1,4 @@
-import {createIdGenerator, getRandomInt, getRandomArrayElement} from './util.js';
+import {createIdGenerator, getRandomInt, getRandomArrayElement} from './utils.js';
 import {NAMES, DESCRIPTIONS, MESSAGES, INITIAL_NUMBER_AVATAR, FINAL_NUMBER_AVATAR, MIN_LIKES, MAX_LIKES, MIN_COMMENTS, MAX_COMMENTS, SIMILAR_PICTURE_COUNT} from './constants.js';
 
 /**
