@@ -97,5 +97,6 @@ export const isMeetingInWorkingHours = (workStart, workEnd, meetingStart, meetin
   if ((workEndMinutes < workStartMinutes) || (meetingDuration < 0)) {
     return null;
   }
+
   return (workStartMinutes <= meetingStartMinutes) && (meetingDurationMinutes <= workEndMinutes);
 };
