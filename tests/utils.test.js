@@ -12,17 +12,14 @@ describe('Should getRandomInt function return the deterministic value', () => {
   });
 
   it('when two arguments are passed', () => {
-    // THEN: Проверяю возвращенный результат
     expect(getRandomInt(1, 5)).toBe(3);
   });
 
   it('when generated number does not include an upper bound', () => {
-    // THEN: Проверяю возвращенный результат
     expect(getRandomInt(0, 1)).toBe(1);
   });
 
   it('when are the boundary cases', () => {
-    // THEN: Проверяю возвращенный результат
     expect(getRandomInt(0, 0)).toBe(0);
     expect(getRandomInt(0.5, 10.5)).toBe(6);
   });

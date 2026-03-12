@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { isStringLengthValid, isPalindrome, extractNumber, parseTime, isMeetingInWorkingHours } from '../js/functions';
+import { isStringLengthValid, isPalindrome, extractNumber, parseTime, isValidTimeObject, toMinutes, isMeetingInWorkingHours } from '../js/functions';
 
 describe('Does the isStringLengthValid function check for a valid maximum length', () => {
   it('A string of multiple characters, with a length parameter greater than the number of characters', () => {
@@ -73,34 +73,88 @@ describe('Does the extractNumber function extract numbers from a string and retu
   });
 });
 
-describe('Should the parseTime function ', () => {
+describe('Should the parseTime function return an object of numbers from a time string', () => {
   it('when the standard time format is in the argument', () => {
-    // GIVEN: корректное время
-    const input = '08:05';
+    // GIVEN: валидная строка в формате чч:мм
 
-    // WHEN: вызов функции
-    const result = parseTime(input);
-
-    // THEN: возвращает минуты
-    expect(result).toBe(8 * 60 + 5);
+    // WHEN & THEN: при вызове функция возвращает объект { hours, minutes }
+    expect(parseTime('14:34')).toEqual({ hours: 14, minutes: 34 });
   });
 
-  it('when the time format has no leading zeros in the argument', () => {
-    // GIVEN: форматы без ведущих нулей
-    const inputs = ['8:5', '08:5', '9:0'];
+  it('when invalid time values are specified in the argument', () => {
+    // GIVEN: получены невалидные значения
+    const inputs = ['', '1234', '10:ab', '7:33:4a'];
 
     // WHEN & THEN
-    expect(parseTime(inputs[0])).toBe(8 * 60 + 5);
-    expect(parseTime(inputs[1])).toBe(8 * 60 + 5);
-    expect(parseTime(inputs[2])).toBe(9 * 60 + 0);
+    expect(parseTime(inputs[0])).toEqual({ hours: 0, minutes: undefined });
+    expect(parseTime(inputs[1])).toEqual({ hours: 1234, minutes: undefined });
+    expect(parseTime(inputs[2])).toEqual({ hours: 10, minutes: NaN });
+    expect(parseTime(inputs[3])).toEqual({ hours: 7, minutes: 33 });
+  });
+
+  it('when are the boundary cases', () => {
+    // GIVEN: форматы с ведущими нулями, одиночными цифрами, пробелами
+    const inputs = ['09:00:05', '8:5', ' 08 : 5'];
+
+    // WHEN & THEN
+    expect(parseTime(inputs[0])).toEqual({ hours: 9, minutes: 0 });
+    expect(parseTime(inputs[1])).toEqual({ hours: 8, minutes: 5 });
+    expect(parseTime(inputs[2])).toEqual({ hours: 8, minutes: 5 });
+  });
+});
+
+describe('Should the isValidTimeObject function check whether an object with hours and minutes is valid', () => {
+  it('when valid values are accepted', () => {
+    // GIVEN: валидные часы и минуты в диапазоне
+    expect(isValidTimeObject({ hours: 8, minutes: 30 })).toBe(true);
+    expect(isValidTimeObject({ hours: 23, minutes: 59 })).toBe(true);
+  });
+
+  it('when invalid values are accepted', () => {
+    // GIVEN: отсутствующие поля, нецелые числа, необъект
+    expect(isValidTimeObject({})).toBe(false);
+    expect(isValidTimeObject({ hours: 0, minutes: undefined })).toBe(false);
+    expect(isValidTimeObject({ hours: NaN, minutes: 10 })).toBe(false);
+    expect(isValidTimeObject({ hours: 8 })).toBe(false);
+    expect(isValidTimeObject({ hours: 8, minutes: 30.5 })).toBe(false);
+    expect(isValidTimeObject('8:30')).toBe(false);
+    expect(isValidTimeObject(null)).toBe(false);
+  });
+
+  it('when are the boundary cases', () => {
+    // GIVEN: часы и минуты вне диапазона, минимальные и максимальные допустимые значения
+    expect(isValidTimeObject({ hours: 24, minutes: 0 })).toBe(false);
+    expect(isValidTimeObject({ hours: 8, minutes: 60 })).toBe(false);
+    expect(isValidTimeObject({ hours: 0, minutes: 0 })).toBe(true);
+  });
+});
+
+describe('Should the toMinutes function return time in minutes', () => {
+  it('when the standard time format is in the argument', () => {
+    // GIVEN: корректное время
+    const input = { hours: 8, minutes: 15 };
+
+    // WHEN: вызов функции
+    const result = toMinutes(input);
+
+    // THEN: возвращает минуты
+    expect(result).toBe(8 * 60 + 15);
   });
 
   it('when the time format in the argument is incorrect', () => {
-    // GIVEN: некорректные строки
-    const invalid = ['abc', '25:00', '9:60', '9', '09:xx'];
+    // GIVEN: невалидные значения и типы, нечисловые часы/минуты
 
     // WHEN & THEN
-    invalid.forEach((el) => expect(parseTime(el)).toBe(-1));
+    expect(toMinutes({})).toBeNaN();
+    expect(toMinutes({ hours: 8 })).toBeNaN();
+    expect(toMinutes({ hourse: undefined, minutes: 30 })).toBeNaN();
+    expect(toMinutes('8:30')).toBeNaN();
+    expect(toMinutes([8, 30])).toBeNaN();
+  });
+
+  it('when are the boundary cases', () => {
+    expect(toMinutes({ hours: 0, minutes: 0 })).toBe(0);
+    expect(toMinutes({ hours: 23, minutes: 59 })).toBe(1439);
   });
 });
 
@@ -113,18 +167,21 @@ describe('Should the isMeetingInWorkingHours function check whether the meeting 
   });
 
   it('when the time format in the argument is incorrect', () => {
-    // GIVEN: некорректный формат
+    // GIVEN: некорректный формат времени, длительности встречи
 
     // WHEN & THEN
-    expect(isMeetingInWorkingHours('abc', '18:00', '10:00', 30)).toBe(false);
+    expect(isMeetingInWorkingHours('18:00', '09:00', '10:00', 30)).toBe(null);
+    expect(isMeetingInWorkingHours('abc', '18:00', '10:00', 30)).toBe(null);
+    expect(isMeetingInWorkingHours('10:00', '11:00', '10:00', -10)).toBe(null);
   });
 
   it('when are the boundary cases', () => {
     // GIVEN: встреча за пределами рабочего дня, форматы без ведущих нулей
 
     // WHEN & THEN
+    expect(isMeetingInWorkingHours('9:00', '18:00', '8:45', 20)).toBe(false);
     expect(isMeetingInWorkingHours('09:00', '18:00', '17:45', 20)).toBe(false);
-    expect(isMeetingInWorkingHours('8:5', '17:30', '8:05', 60)).toBe(true);
     expect(isMeetingInWorkingHours('09:00', '18:00', '18:00', 0)).toBe(true);
+    expect(isMeetingInWorkingHours('8:5', '17:30', '8:05', 60)).toBe(true);
   });
 });
