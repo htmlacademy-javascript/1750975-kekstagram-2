@@ -52,7 +52,9 @@ export const isValidTimeObject = (timeObj) => {
   if (!timeObj || typeof timeObj !== 'object') {
     return false;
   }
+
   const { hours, minutes } = timeObj;
+
   return (
     Number.isInteger(hours) && hours >= 0 && hours <= 23 &&
     Number.isInteger(minutes) && minutes >= 0 && minutes <= 59
@@ -81,10 +83,9 @@ export const isMeetingInWorkingHours = (workStart, workEnd, meetingStart, meetin
   const workEndTime = parseTime(workEnd);
   const meetingStartTime = parseTime(meetingStart);
 
-  if (!isValidTimeObject(workStartTime) ||
-      !isValidTimeObject(workEndTime) ||
-      !isValidTimeObject(meetingStartTime)
-  ) {
+  const isValid = isValidTimeObject(workStartTime) && isValidTimeObject(workEndTime) && isValidTimeObject(meetingStartTime);
+
+  if (!isValid) {
     return null;
   }
 
