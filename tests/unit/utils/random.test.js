@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { getRandomInt } from '../js/utils';
+import { getRandomInt } from '../../../js/utils/random.js';
 
 describe('Should getRandomInt function return the deterministic value', () => {
   beforeEach(() => {

@@ -1,5 +1,5 @@
-import {createIdGenerator, getRandomInt, getRandomArrayElement} from './utils.js';
-import {NAMES, DESCRIPTIONS, MESSAGES, INITIAL_NUMBER_AVATAR, FINAL_NUMBER_AVATAR, MIN_LIKES, MAX_LIKES, MIN_COMMENTS, MAX_COMMENTS, SIMILAR_PICTURE_COUNT} from './constants.js';
+import {createIdGenerator, getRandomInt, getRandomArrayElement} from '../utils/random.js';
+import {NAMES, DESCRIPTIONS, MESSAGES} from '../mocks/constants.js';
 
 /**
  * @typedef {Object} Comment
@@ -9,13 +9,21 @@ import {NAMES, DESCRIPTIONS, MESSAGES, INITIAL_NUMBER_AVATAR, FINAL_NUMBER_AVATA
  * @property {string} name - Имя автора комментария, выбранное случайно из массива NAMES.
  */
 /**
- * @typedef {Object} PictureDescription
+ * @typedef {Object} PicturePost
  * @property {number} id - Уникальный идентификатор описания, сгенерированный функцией generatePictureId().
  * @property {string} url - URL пути к изображению в формате photos/NN.jpg, где NN соответствует id.
  * @property {string} description - Описание фотографии, выбранное случайно из массива DESCRIPTIONS.
  * @property {number} likes - Количество лайков, случайное число от MIN_LIKES до MAX_LIKES включительно.
  * @property {Comment[]} comments - Вложенный массив комментариев к фотографии. Типизирован выше как массив объектов Comment.
  */
+
+const INITIAL_NUMBER_AVATAR = 1;
+const FINAL_NUMBER_AVATAR = 6;
+const MIN_LIKES = 15;
+const MAX_LIKES = 200;
+const MIN_COMMENTS = 0;
+const MAX_COMMENTS = 30;
+const SIMILAR_PICTURE_COUNT = 25;
 
 export const generatePictureId = createIdGenerator(1);
 export const generateCommentId = createIdGenerator(1);
@@ -33,9 +41,9 @@ export const createComment = () => ({
 
 /**
  * Генерирует описание фотографии, опубликованной пользователем.
- * @returns {PictureDescription} Объект описания изображения.
+ * @returns {PicturePost} Объект описания изображения.
  */
-export const generatePictureDescription = () => {
+export const generatePicturePost = () => {
   const pictureId = generatePictureId();
   return {id: pictureId,
     url: `photos/${pictureId}.jpg`,
@@ -49,8 +57,8 @@ export const generatePictureDescription = () => {
  * Массив объектов описания фотографий.
  * Создается с помощью Array.from, где:
  * - длина массива равна константе SIMILAR_PICTURE_COUNT
- * - каждый элемент генерируется функцией generatePictureDescription()
- * @type {PictureDescription[]} - типизирован выше как массив объектов PictureDescription.
+ * - каждый элемент генерируется функцией generatePicturePost()
+ * @type {PicturePost[]} - типизирован выше как массив объектов PicturePost.
  * @constant - Неизменяемая константа.
  */
-export const similarPictures = () => Array.from({length: SIMILAR_PICTURE_COUNT}, generatePictureDescription);
+export const similarPictures = () => Array.from({length: SIMILAR_PICTURE_COUNT}, generatePicturePost);
