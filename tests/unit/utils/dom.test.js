@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { findTemplate, renderGroup } from '../../../js/utils/dom.js';
 
 describe('Should findTemplate function return the first child element of the template', () => {
@@ -30,6 +30,7 @@ describe('Should findTemplate function return the first child element of the tem
     document.body.appendChild(template);
 
     expect(findTemplate('multiple-children')).toBe(firstChild);
+    document.body.removeChild(template);
   });
 
   it('when the template is not found', () => {
@@ -42,6 +43,7 @@ describe('Should findTemplate function return the first child element of the tem
     document.body.appendChild(div);
 
     expect(() => findTemplate('fake')).toThrow('Element is not a template');
+    document.body.removeChild(div);
   });
 
   it('when the found template is empty', () => {
@@ -50,5 +52,39 @@ describe('Should findTemplate function return the first child element of the tem
     document.body.appendChild(template);
 
     expect(() => findTemplate('empty')).toThrow(`Template ${template.id} has no child elements`);
+    document.body.removeChild(template);
+  });
+});
+
+describe('Should renderGroup function render a group of elements in a container', () => {
+  it('when renders items correctly', () => {
+    const items = [{ id: 1 }, { id: 2 }];
+    const makeElement = vi.fn(() => document.createElement('div'));
+    const container = document.createElement('div');
+
+    renderGroup(items, makeElement, container);
+
+    expect(container.children.length).toBe(2);
+    expect(makeElement).toHaveBeenCalledTimes(2);
+  });
+
+  it('when container not found', () => {
+    expect(() => renderGroup([], vi.fn(), null)).toThrow('Container not found');
+  });
+
+  it('when not a container instance of htmlelement', () => {
+    const invalidContainer = document.createTextNode('text');
+    expect(() => renderGroup([], vi.fn(), invalidContainer)).toThrow('Invalid container');
+  });
+
+  it('when are the boundary cases', () => {
+    const makeElement = vi.fn();
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    renderGroup([], makeElement, container);
+
+    expect(container.children.length).toBe(0);
+    document.body.removeChild(container);
   });
 });

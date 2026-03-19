@@ -20,16 +20,16 @@ export const findTemplate = (id) => {
   if (!firstChild) {
     throw new Error(`Template ${id} has no child elements`);
   }
+
   return firstChild;
 };
 
 /**
- * Функция рендеринга группы елементов
- * @template Item
- * @param {Item[]} items - Массив элементов для рендера
- * @param {(item: Item) => HTMLElement} makeElement - Функция создания HTMLElement из элемента
- * @param {HTMLElement} container - Контейнер для вставки
- * @throws {Error} Если container не HTMLElement
+ * Функция рендеринга группы елементов в контейнер
+ * @param {Array} items - Массив данных для рендера
+ * @param {function} makeElement - Функция, создающая DOM-элемент из элемента данных
+ * @param {HTMLElement} container - Контейнер для вставки созданных элементов
+ * @throws {Error} Если container отсутствует или не HTMLElement
  */
 export const renderGroup = (items, makeElement, container) => {
   if (!container) {
@@ -42,5 +42,6 @@ export const renderGroup = (items, makeElement, container) => {
 
   const fragment = document.createDocumentFragment();
   items.forEach((item) => fragment.appendChild(makeElement(item)));
+
   container.appendChild(fragment);
 };

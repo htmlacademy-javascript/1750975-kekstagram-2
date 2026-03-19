@@ -32,8 +32,8 @@ const createThumbnail = ({id, url, description, likes, comments}) => {
 };
 
 /**
- * Рендерит миниатюры фото в контейнер.
- * @param {Photo[]} photos - Массив данных фото.
- * @throws {Error} Если контейнер недоступен.
+ * Рендерит миниатюры фото в контейнер
+ * @param {Photo[]} photos - Массив данных фото
+ * @throws {Error} Если контейнер недоступен
  */
 export const renderThumbnails = (photos) => renderGroup(photos, createThumbnail, pictureContainer);
