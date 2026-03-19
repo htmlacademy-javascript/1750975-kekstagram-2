@@ -73,6 +73,10 @@ describe('Should findTemplate function return the first child element of the tem
 });
 
 describe('Should renderGroup function render a group of elements in a container', () => {
+  beforeEach(() => {
+    document.body.replaceChildren();
+  });
+
   it('when renders items correctly', () => {
     const items = [{ id: 1 }, { id: 2 }];
     const makeElement = vi.fn(() => document.createElement('div'));
