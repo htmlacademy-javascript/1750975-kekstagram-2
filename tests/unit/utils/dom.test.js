@@ -1,36 +1,54 @@
 // @vitest-environment jsdom
 
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { findTemplate, renderGroup } from '../../../js/utils/dom.js';
 
 describe('Should findTemplate function return the first child element of the template', () => {
-  it('when template contains one child element should return this element', () => {
-    const template = document.createElement('template');
-    template.id = 'single-child';
+  beforeEach(() => {
+    document.body.replaceChildren();
+  });
 
+  it('when template contains one child element should return this element', () => {
+    // GIVEN (получение)
+    const template = document.createElement('template');
     const img = document.createElement('img');
+
+    // модификация
+    template.id = 'single-child';
     img.alt = 'preview';
+
+    // добавление
     template.content.appendChild(img);
     document.body.appendChild(template);
 
-    expect(findTemplate('single-child')).toBe(img);
+    // WHEN
+    const singleTemplate = findTemplate('single-child');
+
+    // THEN
+    expect(singleTemplate).toBe(img);
   });
 
   it('when template contains multiple child elements should return first child', () => {
+    // GIVEN получение
     const template = document.createElement('template');
-    template.id = 'multiple-children';
-
     const firstChild = document.createElement('li');
-    firstChild.className = 'first';
     const secondChild = document.createElement('li');
+
+    // модификация
+    template.id = 'multiple-children';
+    firstChild.className = 'first';
     secondChild.className = 'second';
 
+    // добавление
     template.content.appendChild(firstChild);
     template.content.appendChild(secondChild);
     document.body.appendChild(template);
 
-    expect(findTemplate('multiple-children')).toBe(firstChild);
-    document.body.removeChild(template);
+    // WHEN
+    const multipleTemplate = findTemplate('multiple-children');
+
+    // THEN
+    expect(multipleTemplate).toBe(firstChild);
   });
 
   it('when the template is not found', () => {
@@ -43,7 +61,6 @@ describe('Should findTemplate function return the first child element of the tem
     document.body.appendChild(div);
 
     expect(() => findTemplate('fake')).toThrow('Element is not a template');
-    document.body.removeChild(div);
   });
 
   it('when the found template is empty', () => {
@@ -52,7 +69,6 @@ describe('Should findTemplate function return the first child element of the tem
     document.body.appendChild(template);
 
     expect(() => findTemplate('empty')).toThrow(`Template ${template.id} has no child elements`);
-    document.body.removeChild(template);
   });
 });
 
@@ -85,6 +101,5 @@ describe('Should renderGroup function render a group of elements in a container'
     renderGroup([], makeElement, container);
 
     expect(container.children.length).toBe(0);
-    document.body.removeChild(container);
   });
 });
