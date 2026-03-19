@@ -25,7 +25,6 @@ const createThumbnail = ({id, url, description, likes, comments}) => {
 
   image.src = url;
   image.alt = description;
-
   thumbnail.querySelector('.picture__comments').textContent = comments.length;
   thumbnail.querySelector('.picture__likes').textContent = likes;
 
