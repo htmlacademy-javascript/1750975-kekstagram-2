@@ -19,15 +19,18 @@ const createThumbnail = ({id, url, description, likes, comments}) => {
 
   /** @type {HTMLAnchorElement} */
   const thumbnail = pictureTemplate.cloneNode(true);
+  const pictureComments = thumbnail.querySelector('.picture__comments');
+  const pictureLikes = thumbnail.querySelector('.picture__likes');
+  const image = thumbnail.querySelector('.picture__img');
+
   thumbnail.href = url;
   thumbnail.dataset.id = String(id);
 
-  const image = thumbnail.querySelector('.picture__img');
-
   image.src = url;
   image.alt = description;
-  thumbnail.querySelector('.picture__comments').textContent = comments.length;
-  thumbnail.querySelector('.picture__likes').textContent = likes;
+
+  pictureComments.textContent = comments.length;
+  pictureLikes.textContent = likes;
 
   return thumbnail;
 };
