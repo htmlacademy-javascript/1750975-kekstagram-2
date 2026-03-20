@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { createComment, generatePictureDescription } from '../js/data';
+import { createComment, generatePicturePost } from '../../../js/mocks/data.js';
 
 describe('Does the createComment function create an array object whose values are a list of comments', () => {
   // Выполняется перед каждым тестом автоматически
@@ -25,7 +25,7 @@ describe('Does the createComment function create an array object whose values ar
   });
 });
 
-describe('Does the generatePictureDescription function generate an array object whose values are descriptions of the photos', () => {
+describe('Does the generatePicturePost function generate an array object whose values are descriptions of the photos', () => {
   beforeEach(() => {
     // GIVEN: Фиксируем Math.random для воспроизводимых результатов
     vi.spyOn(Math, 'random')
@@ -40,7 +40,7 @@ describe('Does the generatePictureDescription function generate an array object 
     // GIVEN: generatePictureId возвращает предсказуемый ID
 
     // WHEN: Создаю описание изображения
-    const picture = generatePictureDescription();
+    const picture = generatePicturePost();
 
     // THEN: Проверяю формат свойства URL
     expect(picture.url).toMatch(/^photos\/\d+\.jpg$/);

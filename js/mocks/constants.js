@@ -39,11 +39,3 @@ export const MESSAGES = [
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!',
 ];
-
-export const INITIAL_NUMBER_AVATAR = 1;
-export const FINAL_NUMBER_AVATAR = 6;
-export const MIN_LIKES = 15;
-export const MAX_LIKES = 200;
-export const MIN_COMMENTS = 0;
-export const MAX_COMMENTS = 30;
-export const SIMILAR_PICTURE_COUNT = 25;
