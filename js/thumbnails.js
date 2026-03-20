@@ -1,6 +1,6 @@
 import {findTemplate, renderGroup} from './utils/dom.js';
 
-/** @type {HTMLAnchorElement} */
+/**@type {HTMLAnchorElement | null}*/
 const pictureTemplate = findTemplate('picture');
 const pictureContainer = document.querySelector('.pictures');
 
@@ -8,12 +8,13 @@ const pictureContainer = document.querySelector('.pictures');
  * Создаёт миниатюру фото из объекта photo
  * @param {{id: string|number, url: string, description: string, comments: any[], likes: number}} - Объект
  * с данными фото - типизирован в data.js как массив объектов PicturePost
- * @returns {HTMLAnchorElement} Готовая миниатюра
- * @throws {Error} Если шаблон или контейнер недоступны
- */
+ * @returns {HTMLAnchorElement | null} Готовая миниатюра или null, если не удалось найти шаблон
+*/
 const createThumbnail = ({id, url, description, likes, comments}) => {
   if (!pictureTemplate) {
-    throw new Error('Picture template not found');
+    // eslint-disable-next-line no-console
+    console.error('Шаблон не найден или некорректен');
+    return null;
   }
 
   /** @type {HTMLAnchorElement} */
@@ -34,6 +35,5 @@ const createThumbnail = ({id, url, description, likes, comments}) => {
 /**
  * Рендерит миниатюры фото в контейнер
  * @param {Photo[]} photos - Массив данных фото
- * @throws {Error} Если контейнер недоступен
  */
 export const renderThumbnails = (photos) => renderGroup(photos, createThumbnail, pictureContainer);

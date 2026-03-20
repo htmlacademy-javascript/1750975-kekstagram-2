@@ -2,23 +2,20 @@
  * Функция поиска шаблона в HTML-разметке по ID
  * Должен содержать только один дочерний элемент
  * @param {string} id - ID шаблона
- * @returns {HTMLElement|null} Первый дочерний элемент шаблона или null если шаблон недоступен
- * * @throws {Error} Если элемент найден, но не является HTMLTemplateElement или пустой
+ * @returns {HTMLElement|null} Первый дочерний элемент шаблона или null,
+ *  если шаблон недоступен или некорректен
  */
 export const findTemplate = (id) => {
   const template = document.getElementById(id);
 
-  if(!template) {
+  if(!template || !(template instanceof HTMLTemplateElement)) {
     return null;
   }
 
-  if(!(template instanceof HTMLTemplateElement)) {
-    throw new Error(`Element is not a template: ${id}`);
-  }
-
   const firstChild = template.content.firstElementChild;
+
   if (!firstChild) {
-    throw new Error(`Template ${id} has no child elements`);
+    return null;
   }
 
   return firstChild;
@@ -29,19 +26,24 @@ export const findTemplate = (id) => {
  * @param {Array} items - Массив данных для рендера
  * @param {function} makeElement - Функция, создающая DOM-элемент из элемента данных
  * @param {HTMLElement} container - Контейнер для вставки созданных элементов
- * @throws {Error} Если container отсутствует или не HTMLElement
+ * @returns {HTMLElement|null} Заполненный элементами контейнер или null,
+ *  если контейнер не найден
  */
 export const renderGroup = (items, makeElement, container) => {
   if (!container) {
-    throw new Error('Container not found');
-  }
-
-  if (!(container instanceof HTMLElement)) {
-    throw new Error('Invalid container');
+    // eslint-disable-next-line no-console
+    console.error('Контейнер не найден');
+    return null;
   }
 
   const fragment = document.createDocumentFragment();
-  items.forEach((item) => fragment.appendChild(makeElement(item)));
+
+  items.forEach((item) => {
+    const element = makeElement(item);
+    if (element !== null) {
+      fragment.appendChild(element);
+    }
+  });
 
   container.appendChild(fragment);
 };
