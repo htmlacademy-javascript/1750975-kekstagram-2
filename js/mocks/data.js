@@ -1,4 +1,4 @@
-import {createIdGenerator, getRandomInt, getRandomArrayElement} from '../utils/random.js';
+import {createIdGenerator, getRandomInt, getRandomArrayElement} from '../utils/utils.js';
 import {NAMES, DESCRIPTIONS, MESSAGES} from '../mocks/constants.js';
 
 /**
@@ -61,4 +61,4 @@ export const generatePicturePost = () => {
  * @type {PicturePost[]} - типизирован выше как массив объектов PicturePost.
  * @constant - Неизменяемая константа.
  */
-export const similarPictures = () => Array.from({length: SIMILAR_PICTURE_COUNT}, generatePicturePost);
+export const createPictures = () => Array.from({length: SIMILAR_PICTURE_COUNT}, generatePicturePost);
