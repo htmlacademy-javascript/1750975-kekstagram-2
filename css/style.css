@@ -843,6 +843,7 @@ main {
   -ms-flex-negative: 0;
         flex-shrink: 0;
   margin-right: 15px;
+  border-radius: 50%;
 }
 
 .social__caption {

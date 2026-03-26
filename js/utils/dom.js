@@ -47,3 +47,10 @@ export const renderGroup = (items, makeElement, container) => {
 
   container.appendChild(fragment);
 };
+
+/**
+ * Проверяет, является ли нажатая клавиша клавишей Escape
+ * @param {KeyboardEvent} evt - cобытие клавиатуры
+ * @returns {boolean} true, если клавиша Escape, иначе false
+ */
+export const isEscapeKey = (evt) => evt.key === 'Escape';

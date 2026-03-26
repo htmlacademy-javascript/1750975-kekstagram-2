@@ -1,4 +1,3 @@
-import {similarPictures} from './mocks/data.js';
-import {renderThumbnails} from './thumbnails.js';
+import { renderThumbnails } from './renders/thumbnails.js';
 
-renderThumbnails(similarPictures());
+renderThumbnails();
