@@ -45,7 +45,7 @@ const createPictureComment = ({avatar, message, name}) => {
  * @returns {void}
 */
 const renderNextComment = () => {
-  if (!currentComments || currentComments.length === 0) {
+  if (currentComments.length === 0) {
     return;
   }
 
