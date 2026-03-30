@@ -52,10 +52,10 @@ export const initUploadModal = () => {
   uploadFileControl.addEventListener('change', () => {
     pictureEditorForm.classList.remove('hidden');
     document.body.classList.add('modal-open');
-  });
 
-  pictureEditorResetButton.addEventListener('click', closePictureEditor);
-  document.addEventListener('keydown', onEscapeKeydown);
+    pictureEditorResetButton.addEventListener('click', closePictureEditor);
+    document.addEventListener('keydown', onEscapeKeydown);
+  });
 };
 
 /**
