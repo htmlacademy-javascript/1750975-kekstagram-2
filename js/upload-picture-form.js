@@ -1,7 +1,6 @@
 import { isEscapeKey } from './utils/dom.js';
-import { error, isHashtagsValid } from './validate-hashtag.js';
+import { error, isHashtagsValid, errorMessageComment, isValidCommentLength } from './validate-hashtags-and-comment.js';
 
-const MAX_COMMENT_LENGTH = 140;
 const SCALE_STEP = 25;
 
 const uploadPictureForm = document.querySelector('.img-upload__form');
@@ -70,12 +69,7 @@ const pristine = new Pristine(uploadPictureForm, {
 pristine.addValidator(hashtagInput, isHashtagsValid, error, 1, false);
 
 // Валидатор длины комментария
-pristine.addValidator(commentInput, (value) => {
-  if(!value) {
-    return true;
-  }
-  return value.length <= MAX_COMMENT_LENGTH;
-}, `Превышено допустимое количество символов в комментарии - ${MAX_COMMENT_LENGTH}`, 2, false);
+pristine.addValidator(commentInput, isValidCommentLength, errorMessageComment, 2, false);
 
 /**
  * Обработчик нажатия клавиши Escape на документе,
@@ -132,15 +126,21 @@ function closePictureEditor () {
  * Открывает форму редактирования изображения
  * @returns {void}
 */
-export const initUploadModal = () => {
-  uploadFileControl.addEventListener('change', () => {
-    pictureEditorForm.classList.remove('hidden');
-    document.body.classList.add('modal-open');
+const onUploadPictureChange = () => {
+  pictureEditorForm.classList.remove('hidden');
+  document.body.classList.add('modal-open');
 
-    smallerButton.addEventListener('click', onSmallerButtonClick);
-    biggerButton.addEventListener('click', onBiggerButtonClick);
-    pictureEditorResetButton.addEventListener('click', closePictureEditor);
-    document.addEventListener('keydown', onEscapeKeydown);
-    uploadPictureForm.addEventListener('submit', onFormSubmit);
-  });
+  smallerButton.addEventListener('click', onSmallerButtonClick);
+  biggerButton.addEventListener('click', onBiggerButtonClick);
+  pictureEditorResetButton.addEventListener('click', closePictureEditor);
+  document.addEventListener('keydown', onEscapeKeydown);
+  uploadPictureForm.addEventListener('submit', onFormSubmit);
+};
+
+/**
+ * Инициализирует модальное окно загрузки и редактирования изображения
+ * @returns {void}
+ */
+export const initUploadModal = () => {
+  uploadFileControl.addEventListener('change', onUploadPictureChange);
 };

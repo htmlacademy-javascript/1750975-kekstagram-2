@@ -1,5 +1,7 @@
 const MAX_HASHTAGS = 5;
 const MAX_HASHTAG_LENGTH = 20;
+const MAX_COMMENT_LENGTH = 140;
+export const errorMessageComment = `Превышено допустимое количество символов в комментарии - ${MAX_COMMENT_LENGTH}`;
 
 /** @type {string} Сообщение об ошибке валидации хэштегов */
 let errorMessage = '';
@@ -68,4 +70,16 @@ export const isHashtagsValid = (value) => {
   }
 
   return !hasError;
+};
+
+/**
+ * Проверяет, что комментарий пустой или его длина не превышает допустимое количество символов
+ * @param {string} value - значение поля комментария
+ * @returns {boolean} true, если значение валидно, иначе false
+ */
+export const isValidCommentLength = (value) => {
+  if (!value) {
+    return true; // комментарий не обязателен
+  }
+  return value.length <= MAX_COMMENT_LENGTH;
 };
