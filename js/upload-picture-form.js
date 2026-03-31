@@ -2,15 +2,59 @@ import { isEscapeKey } from './utils/dom.js';
 import { error, isHashtagsValid } from './validate-hashtag.js';
 
 const MAX_COMMENT_LENGTH = 140;
+const SCALE_STEP = 25;
 
 const uploadPictureForm = document.querySelector('.img-upload__form');
 
 const uploadFileControl = uploadPictureForm.querySelector('.img-upload__input');
 const pictureEditorForm = uploadPictureForm.querySelector('.img-upload__overlay');
 const pictureEditorResetButton = uploadPictureForm.querySelector('.img-upload__cancel');
+const smallerButton = uploadPictureForm.querySelector('.scale__control--smaller');
+const biggerButton = uploadPictureForm.querySelector('.scale__control--bigger');
+const scaleValue = uploadPictureForm.querySelector('.scale__control--value');
+const previewPicture = uploadPictureForm.querySelector('.img-upload__preview img');
 
 const hashtagInput = uploadPictureForm.querySelector('.text__hashtags');
 const commentInput = uploadPictureForm.querySelector('.text__description');
+
+/**
+ * Текущий масштаб изображения в процентах (от 25 до 100, по умолчанию 100%)
+ * @type {number}
+ */
+let percent = 100;
+
+/**
+ * Функция обновляет значение поля масштаба и применяет трансформацию к изображению
+ * @returns {void}
+ */
+const updateScale = () => {
+  percent = Math.max(25, Math.min(100, percent));
+
+  scaleValue.value = `${percent}%`;
+
+  const fraction = percent / 100;
+  previewPicture.style.transform = `scale(${fraction})`;
+};
+
+/**
+ * Обработчик клика на кнопку «Уменьшить» масштаб
+ * @param {MouseEvent} event - событие клика по кнопке
+ * @returns {void}
+ */
+const onSmallerButtonClick = () => {
+  percent -= SCALE_STEP;
+  updateScale();
+};
+
+/**
+ * Обработчик клика на кнопку «Увеличить» масштаб
+ * @param {MouseEvent} event - событие клика по кнопке
+ * @returns {void}
+ */
+const onBiggerButtonClick = () => {
+  percent += SCALE_STEP;
+  updateScale();
+};
 
 /**
  * Экземпляр валидатора формы Pristine
@@ -78,6 +122,8 @@ function closePictureEditor () {
   pictureEditorForm.classList.add('hidden');
   document.body.classList.remove('modal-open');
 
+  smallerButton.removeEventListener('click', onSmallerButtonClick);
+  biggerButton.removeEventListener('click', onBiggerButtonClick);
   pictureEditorResetButton.removeEventListener('click', closePictureEditor);
   document.removeEventListener('keydown', onEscapeKeydown);
 }
@@ -91,6 +137,8 @@ export const initUploadModal = () => {
     pictureEditorForm.classList.remove('hidden');
     document.body.classList.add('modal-open');
 
+    smallerButton.addEventListener('click', onSmallerButtonClick);
+    biggerButton.addEventListener('click', onBiggerButtonClick);
     pictureEditorResetButton.addEventListener('click', closePictureEditor);
     document.addEventListener('keydown', onEscapeKeydown);
     uploadPictureForm.addEventListener('submit', onFormSubmit);
