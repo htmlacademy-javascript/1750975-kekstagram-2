@@ -13,6 +13,27 @@ const hashtagInput = uploadPictureForm.querySelector('.text__hashtags');
 const commentInput = uploadPictureForm.querySelector('.text__description');
 
 /**
+ * Экземпляр валидатора формы Pristine
+ * @type {Pristine}
+ */
+const pristine = new Pristine(uploadPictureForm, {
+  classTo: 'img-upload__form',
+  errorTextParent: 'img-upload__field-wrapper',
+  errorTextClass: 'img-upload__field-wrapper--error',
+});
+
+// Валидатор хэштегов
+pristine.addValidator(hashtagInput, isHashtagsValid, error, 1, false);
+
+// Валидатор длины комментария
+pristine.addValidator(commentInput, (value) => {
+  if(!value) {
+    return true;
+  }
+  return value.length <= MAX_COMMENT_LENGTH;
+}, `Превышено допустимое количество символов в комментарии - ${MAX_COMMENT_LENGTH}`, 2, false);
+
+/**
  * Обработчик нажатия клавиши Escape на документе,
  * если фокус находится в поле хэштегов или комментария, форма не закрывается
  * @param {KeyboardEvent} evt - событие keydown
@@ -28,6 +49,24 @@ function onEscapeKeydown (evt) {
     closePictureEditor();
   }
 }
+
+/**
+ * Обработчик отправки формы загрузки изображения,
+ * предотвращает стандартную отправку, запускает валидацию через Pristine,
+ * при успехе нормализует хэштеги (лишние пробелы → один пробел) и отправляет форму.
+ * @param {SubmitEvent} evt - событие submit формы
+ * @returns {void}
+ */
+const onFormSubmit = (evt) => {
+  evt.preventDefault();
+
+  const isValid = pristine.validate();
+
+  if (isValid) {
+    hashtagInput.value = hashtagInput.value.trim().replaceAll(/\s+/g, ' ');
+    uploadPictureForm.submit();
+  }
+};
 
 /**
  * Закрывает форму редактирования изображения
@@ -54,44 +93,6 @@ export const initUploadModal = () => {
 
     pictureEditorResetButton.addEventListener('click', closePictureEditor);
     document.addEventListener('keydown', onEscapeKeydown);
+    uploadPictureForm.addEventListener('submit', onFormSubmit);
   });
 };
-
-/**
- * Экземпляр валидатора формы Pristine
- * @type {Pristine}
- */
-const pristine = new Pristine(uploadPictureForm, {
-  classTo: 'img-upload__form',
-  errorTextParent: 'img-upload__field-wrapper',
-  errorTextClass: 'img-upload__field-wrapper--error',
-});
-
-// Валидатор хэштегов
-pristine.addValidator(hashtagInput, isHashtagsValid, error, 1, false);
-
-// Валидатор длины комментария
-pristine.addValidator(commentInput, (value) => {
-  if(!value) {
-    return true;
-  }
-  return value.length <= MAX_COMMENT_LENGTH;
-}, `Превышено допустимое количество символов в комментарии - ${MAX_COMMENT_LENGTH}`, 2, false);
-
-/**
- * Обработчик отправки формы загрузки изображения,
- * предотвращает стандартную отправку, запускает валидацию через Pristine,
- * при успехе нормализует хэштеги (лишние пробелы → один пробел) и отправляет форму.
- * @param {SubmitEvent} evt - событие submit формы
- * @returns {void}
- */
-uploadPictureForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-
-  const isValid = pristine.validate();
-
-  if (isValid) {
-    hashtagInput.value = hashtagInput.value.trim().replaceAll(/\s+/g, ' ');
-    uploadPictureForm.submit();
-  }
-});
