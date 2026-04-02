@@ -1,4 +1,5 @@
 import { isEscapeKey } from './utils/dom.js';
+import { previewPicture, onEffectChange } from './editor-effects-slider.js';
 import { error, isHashtagsValid, errorMessageComment, isValidCommentLength } from './validate-hashtags-and-comment.js';
 
 const SCALE_STEP = 25;
@@ -11,8 +12,7 @@ const pictureEditorResetButton = uploadPictureForm.querySelector('.img-upload__c
 const smallerButton = uploadPictureForm.querySelector('.scale__control--smaller');
 const biggerButton = uploadPictureForm.querySelector('.scale__control--bigger');
 const scaleValue = uploadPictureForm.querySelector('.scale__control--value');
-const previewPicture = uploadPictureForm.querySelector('.img-upload__preview img');
-
+const effectsList = uploadPictureForm.querySelector('.effects__list');
 const hashtagInput = uploadPictureForm.querySelector('.text__hashtags');
 const commentInput = uploadPictureForm.querySelector('.text__description');
 
@@ -55,6 +55,8 @@ const onBiggerButtonClick = () => {
   updateScale();
 };
 
+effectsList.addEventListener('change', onEffectChange);
+
 /**
  * Экземпляр валидатора формы Pristine
  * @type {Pristine}
@@ -65,10 +67,7 @@ const pristine = new Pristine(uploadPictureForm, {
   errorTextClass: 'img-upload__field-wrapper--error',
 });
 
-// Валидатор хэштегов
 pristine.addValidator(hashtagInput, isHashtagsValid, error, 1, false);
-
-// Валидатор длины комментария
 pristine.addValidator(commentInput, isValidCommentLength, errorMessageComment, 2, false);
 
 /**
