@@ -50,7 +50,6 @@ export const onEffectChange = (evt) => {
     previewPicture.style.filter = 'none';
   } else {
     const { min, max, step, style } = EFFECTS[currentEffect];
-    effectLevel.classList.remove('hidden');
 
     effectLevelSlider.noUiSlider.updateOptions({
       range: { min, max },
@@ -59,6 +58,7 @@ export const onEffectChange = (evt) => {
     });
 
     effectLevelValue.value = max;
+    effectLevel.classList.remove('hidden');
     previewPicture.style.filter = style(max.toString());
   }
 };
