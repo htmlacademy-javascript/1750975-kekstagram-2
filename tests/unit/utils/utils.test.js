@@ -1,26 +1,37 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { getRandomInt } from '../../../js/utils/utils.js';
+// @vitest-environment jsdom
 
-describe('Should getRandomInt function return the deterministic value', () => {
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { renderGroup } from '../../../js/utils/utils.js';
+
+describe('Should renderGroup function render a group of elements in a container', () => {
   beforeEach(() => {
-    // GIVEN: Фиксируем Math.random для воспроизводимых результатов
-    vi.spyOn(Math, 'random').mockReturnValue(0.5);
+    document.body.replaceChildren();
   });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
+  it('when renders items correctly', () => {
+    const items = [{ id: 1 }, { id: 2 }];
+    const makeElement = vi.fn(() => document.createElement('div'));
+    const container = document.createElement('div');
+
+    renderGroup(items, makeElement, container);
+
+    expect(container.children.length).toBe(2);
+    expect(makeElement).toHaveBeenCalledTimes(2);
   });
 
-  it('when two arguments are passed', () => {
-    expect(getRandomInt(1, 5)).toBe(3);
-  });
+  it('when container not found', () => {
+    const result = renderGroup([], vi.fn(), null);
 
-  it('when generated number does not include an upper bound', () => {
-    expect(getRandomInt(0, 1)).toBe(1);
+    expect(result).toBeNull();
   });
 
   it('when are the boundary cases', () => {
-    expect(getRandomInt(0, 0)).toBe(0);
-    expect(getRandomInt(0.5, 10.5)).toBe(6);
+    const makeElement = vi.fn();
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    renderGroup([], makeElement, container);
+
+    expect(container.children.length).toBe(0);
   });
 });

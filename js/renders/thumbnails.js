@@ -1,11 +1,10 @@
-import { createPictures } from '../mocks/data.js';
-import { findTemplate, renderGroup } from '../utils/dom.js';
-import { openPicture } from '../renders/open-picture.js';
+import { getData } from '../utils/api.js';
+import { findTemplate, renderGroup, showErrorMessage } from '../utils/utils.js';
+import { openPicture } from '../show-big-picture/open-picture.js';
 
 /**@type {HTMLAnchorElement | null}*/
 const thumbnailTemplate = findTemplate('picture');
 const pictureContainer = document.querySelector('.pictures');
-export const pictures = createPictures();
 
 /**
  * Создаёт миниатюру фото из объекта photo
@@ -37,6 +36,18 @@ const createThumbnail = ({id, url, description, likes, comments}) => {
 
   return thumbnail;
 };
+
+/**
+ * Список опубликованных фотографий, загруженных с сервера
+ * @type {Array}
+ */
+export let pictures = [];
+
+try {
+  pictures = await getData();
+} catch (error) {
+  showErrorMessage(error.message);
+}
 
 /**
  * Рендерит миниатюры фото в контейнер

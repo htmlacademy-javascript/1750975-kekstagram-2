@@ -1,4 +1,4 @@
-import { renderGroup } from '../utils/dom.js';
+import { renderGroup } from '../utils/utils.js';
 
 /**
  * @typedef {Object} CommentData
@@ -73,7 +73,7 @@ const renderNextComment = () => {
  */
 export const renderComments = (comments) => {
   currentComments = Array.isArray(comments) ? comments : [];
-  renderNextComment(comments);
+  renderNextComment();
 
   commentsLoader.addEventListener('click', renderNextComment);
 };

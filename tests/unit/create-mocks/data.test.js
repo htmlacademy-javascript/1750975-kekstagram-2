@@ -1,5 +1,6 @@
+// @vitest-environment jsdom
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { createComment, generatePicturePost } from '../../../js/mocks/data.js';
+import { createComment, generatePicturePost } from '../../../js/create-mocks/data.js';
 
 describe('Does the createComment function create an array object whose values are a list of comments', () => {
   // Выполняется перед каждым тестом автоматически

@@ -1,5 +1,6 @@
-import {createIdGenerator, getRandomInt, getRandomArrayElement} from '../utils/utils.js';
-import {NAMES, DESCRIPTIONS, MESSAGES} from '../mocks/constants.js';
+import { createIdGenerator } from '../utils/utils.js';
+import { getRandomInt, getRandomArrayElement } from '../utils/random-values.js';
+import { NAMES, DESCRIPTIONS, MESSAGES } from './constants.js';
 
 /**
  * @typedef {Object} Comment
