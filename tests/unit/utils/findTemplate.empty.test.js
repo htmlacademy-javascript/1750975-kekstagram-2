@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import { describe, it, expect, beforeEach } from 'vitest';
-import { findTemplate } from '../../../js/utils/dom.js';
+import { findTemplate } from '../../../js/utils/utils.js';
 
 describe('Should findTemplate function return null when the template is empty', () => {
   beforeEach(() => {

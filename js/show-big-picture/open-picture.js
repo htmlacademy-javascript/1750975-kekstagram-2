@@ -1,6 +1,6 @@
-import { isEscapeKey } from '../utils/dom.js';
-import { clearComments, renderComments } from './comments.js';
-import { pictures } from './thumbnails.js';
+import { isEscapeKey } from '../utils/modal-windows.js';
+import { clearComments, renderComments } from '../renders/comments.js';
+import { pictures } from '../renders/thumbnails.js';
 
 const pictureElement = document.querySelector('.big-picture');
 const pictureImage = pictureElement.querySelector('.big-picture__img img');

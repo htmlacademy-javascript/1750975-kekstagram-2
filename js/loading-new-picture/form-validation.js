@@ -1,7 +1,7 @@
 const MAX_HASHTAGS = 5;
 const MAX_HASHTAG_LENGTH = 20;
 const MAX_COMMENT_LENGTH = 140;
-export const errorMessageComment = `Превышено допустимое количество символов в комментарии - ${MAX_COMMENT_LENGTH}`;
+const errorMessageComment = `Превышено допустимое количество символов в комментарии - ${MAX_COMMENT_LENGTH}`;
 
 /** @type {string} Сообщение об ошибке валидации хэштегов */
 let errorMessage = '';
@@ -18,7 +18,7 @@ export const error = () => errorMessage;
  * @param {string} value - значение поля хэштегов
  * @returns {boolean} true, если хэштеги валидны, иначе false
  */
-export const isHashtagsValid = (value) => {
+const validateHashtag = (value) => {
   errorMessage = '';
   // Хэштеги не обязательны
   if (!value || value.trim() === '') {
@@ -77,9 +77,54 @@ export const isHashtagsValid = (value) => {
  * @param {string} value - значение поля комментария
  * @returns {boolean} true, если значение валидно, иначе false
  */
-export const isValidCommentLength = (value) => {
+export const validateCommentLength = (value) => {
   if (!value) {
     return true; // комментарий не обязателен
   }
   return value.length <= MAX_COMMENT_LENGTH;
+};
+
+/**
+ * Создаёт фабрику валидатора формы Pristine для загрузки изображения,
+ * возвращает объект с экземпляром Pristine, функцией добавления валидаторов
+ * и методом validate, который запускает валидацию всей формы
+ * @template {HTMLInputElement} HashtagInput
+ * @template {HTMLTextAreaElement} CommentInput
+ * @param {HTMLFormElement} form - DOM‑элемент формы, который необходимо валидировать
+ * @returns {{
+ *   pristine: Pristine;
+ *   addValidators: (hashtagInput: HashtagInput, commentInput: CommentInput) => void;
+ *   reset: () => void;
+ *   validate: () => boolean;
+ * }}
+ */
+export const createValidator = (form) => {
+  /**
+   * Экземпляр валидатора формы Pristine
+   * @type {Pristine}
+   */
+  const pristine = new Pristine(form, {
+    classTo: 'img-upload__form',
+    errorTextParent: 'img-upload__field-wrapper',
+    errorTextClass: 'img-upload__field-wrapper--error',
+  });
+
+  const addValidators = (hashtagInput, commentInput) => {
+    pristine.addValidator(hashtagInput, validateHashtag, error, 1, false);
+    pristine.addValidator(commentInput, validateCommentLength, errorMessageComment, 2, false);
+
+    commentInput.addEventListener('input', () => pristine.validate());
+  };
+
+  const resetValidation = () => {
+    pristine.reset();
+    form.reset();
+  };
+
+  return {
+    pristine,
+    addValidators,
+    resetValidation,
+    validate: () => pristine.validate()
+  };
 };
