@@ -80,7 +80,7 @@ export const resetScale = () => {
  * Инициализирует слайдер noUiSlider для эффектов
  * @returns {void}
  */
-const initEffectSlider = () => {
+export const initEffectSlider = () => {
   noUiSlider.create(effectLevelSlider, {
     range: { min: 0, max: 100 },
     start: 100,
@@ -94,7 +94,6 @@ const initEffectSlider = () => {
   });
 };
 
-initEffectSlider();
 effectLevel.classList.add('hidden'); // По умолчанию скрыт
 
 /**

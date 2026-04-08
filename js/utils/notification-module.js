@@ -10,6 +10,7 @@ let notifListenersAttached = false;
  */
 const closeNotification = (evt) => {
   evt.stopPropagation();
+
   const existElement = document.querySelector('.success') || document.querySelector('.error');
   if (!existElement) {
     return;

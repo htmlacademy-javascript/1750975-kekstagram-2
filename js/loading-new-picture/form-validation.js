@@ -113,9 +113,7 @@ export const createValidator = (form) => {
     pristine.addValidator(hashtagInput, validateHashtag, error, 1, false);
     pristine.addValidator(commentInput, validateCommentLength, errorMessageComment, 2, false);
 
-    commentInput.addEventListener('input', () => {
-      pristine.validate();
-    });
+    commentInput.addEventListener('input', () => pristine.validate());
   };
 
   const resetValidation = () => {

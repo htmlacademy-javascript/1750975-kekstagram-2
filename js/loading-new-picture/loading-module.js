@@ -88,10 +88,6 @@ form.addEventListener('reset', () => {
  * @returns {Promise<void>}
 */
 const sendFormData = async (formElement) => {
-  if(!validator) {
-    return;
-  }
-
   const isValid = validator.validate();
   if (!isValid) {
     return;

@@ -31,7 +31,7 @@ const ErrorText = {
  */
 const load = async (route, method = Method.GET, body = null) => {
   const response = await fetch(`${BASE_URL}${route}`, { method, body });
-  return response.ok ? await response.json()
+  return response.ok ? response.json()
     : Promise.reject({ message: ErrorText[method], status: response.status });
 };
 
@@ -40,7 +40,7 @@ const load = async (route, method = Method.GET, body = null) => {
  * @async
  * @returns {Promise<Array>} Массив объектов фотографий
  */
-export const getData = async () => await load(Route.GET_DATA);
+export const getData = () => load(Route.GET_DATA);
 
 /**
  * Отправляет новую фотографию на сервер

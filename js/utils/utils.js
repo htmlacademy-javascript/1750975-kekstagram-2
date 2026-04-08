@@ -68,6 +68,18 @@ export const renderGroup = (items, makeElement, container) => {
 const errorLoadDataTemplate = findTemplate('data-error');
 
 /**
+ * Удаляет элемент ошибки из DOM
+ * @function
+ * @returns {void}
+ */
+const errorRemover = () => {
+  const errorLoadDataArea = body.querySelector('.data-error');
+  if (errorLoadDataArea) {
+    errorLoadDataArea.remove();
+  }
+};
+
+/**
  * Показывает сообщение об ошибке с автоматическим удалением через таймаут,
  * клонирует шаблон ошибки, заполняет текстом и добавляет в body
  * @param {string} [message] Текст ошибки для отображения
@@ -77,11 +89,8 @@ export const showErrorMessage = (message) => {
   if (message) {
     errorArea.querySelector('.data-error__title').textContent = message;
   }
+
   body.append(errorArea);
 
-  const errorLoadDataArea = body.querySelector('.data-error');
-
-  setTimeout(() => {
-    errorLoadDataArea.remove();
-  }, REMOVE_MESSAGE_TIMEOUT);
+  setTimeout(errorRemover, REMOVE_MESSAGE_TIMEOUT);
 };
