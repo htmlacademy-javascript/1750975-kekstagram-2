@@ -1,5 +1,4 @@
-import { getData } from '../utils/api.js';
-import { findTemplate, renderGroup, showErrorMessage } from '../utils/utils.js';
+import { findTemplate, renderGroup } from '../utils/utils.js';
 import { openPicture } from '../show-big-picture/open-picture.js';
 
 /**@type {HTMLAnchorElement | null}*/
@@ -38,22 +37,19 @@ const createThumbnail = ({id, url, description, likes, comments}) => {
 };
 
 /**
- * Список опубликованных фотографий, загруженных с сервера
+ * Массив загруженных фотографий
  * @type {Array}
  */
-export let pictures = [];
-
-try {
-  pictures = await getData();
-} catch (error) {
-  showErrorMessage(error.message);
-}
+export const pictures = [];
 
 /**
- * Рендерит миниатюры фото в контейнер
- * @param {Photo[]} photos - Массив данных фото
+ * Рендерит миниатюры в контейнер, очищает перед рендером
+ * @param {Array} photos - Массив данных фото
  */
-export const renderThumbnails = () => renderGroup(pictures, createThumbnail, pictureContainer);
+export const renderThumbnails = (photos = pictures) => {
+  pictures.push(...photos);
+  return renderGroup(photos, createThumbnail, pictureContainer);
+};
 
 /**
  * Обработчик клика по контейнеру с миниатюрами загруженных изображений,
@@ -61,10 +57,10 @@ export const renderThumbnails = () => renderGroup(pictures, createThumbnail, pic
  * @param {MouseEvent} evt - Событие клика мыши
  */
 pictureContainer.addEventListener('click', (evt) => {
-  const currentPicture = evt.target.closest('.picture');
+  const picture = evt.target.closest('a.picture');
 
-  if (currentPicture) {
+  if (picture) {
     evt.preventDefault();
-    openPicture(currentPicture.dataset.id);
+    openPicture(picture.dataset.id);
   }
 });

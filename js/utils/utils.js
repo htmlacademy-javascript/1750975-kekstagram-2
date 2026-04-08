@@ -94,3 +94,17 @@ export const showErrorMessage = (message) => {
 
   setTimeout(errorRemover, REMOVE_MESSAGE_TIMEOUT);
 };
+
+/**
+ * Создаёт debounced-версию функции: выполняет колбэк только после паузы в вызовах
+ * @param {Function} callback - Функция-колбэк для отложенного выполнения
+ * @param {number} timeoutDelay - Задержка в миллисекундах перед вызовом
+ * @returns {Function} Новая функция
+ */
+export const debounce = (callback, timeoutDelay) => {
+  let timeoutId;
+  return (...args) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, args), timeoutDelay);
+  };
+};
