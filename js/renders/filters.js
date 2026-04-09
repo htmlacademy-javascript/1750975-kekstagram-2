@@ -31,6 +31,7 @@ const renderWithClear = (filteredPictures) => {
   renderThumbnails(filteredPictures);
 };
 
+// Debounced-версия renderWithClear: рендерит миниатюры не чаще, чем раз в 500мс
 const debounceRender = debounce(renderWithClear, DEBOUNCE_DELAY);
 
 /**

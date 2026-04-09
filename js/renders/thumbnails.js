@@ -47,7 +47,9 @@ export const pictures = [];
  * @param {Array} photos - Массив данных фото
  */
 export const renderThumbnails = (photos = pictures) => {
+  pictures.length = 0;
   pictures.push(...photos);
+
   return renderGroup(photos, createThumbnail, pictureContainer);
 };
 
