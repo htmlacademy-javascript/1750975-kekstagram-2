@@ -12,8 +12,8 @@ const filterBox = document.querySelector('.img-filters');
  * @param filteredPictures - Отфильтрованный массив
  */
 const renderWithClear = (filteredPictures) => {
-  const pictureContainer = document.querySelector('.pictures');
-  pictureContainer.querySelectorAll('a.picture').forEach((item) => item.remove());
+  document.querySelector('.pictures').querySelectorAll('a.picture').forEach((item) => item.remove());
+
   renderThumbnails(filteredPictures);
 };
 
@@ -52,11 +52,11 @@ const onFilterChange = (evt) => {
     return;
   }
 
-  activeButton?.classList.remove(ACTIVE_BUTTON_CLASS);
+  activeButton.classList.remove(ACTIVE_BUTTON_CLASS);
   targetButton.classList.add(ACTIVE_BUTTON_CLASS);
 
   targetButton.setAttribute('aria-pressed', 'true');
-  activeButton?.setAttribute('aria-pressed', 'false');
+  activeButton.setAttribute('aria-pressed', 'false');
 
   currentFilter = targetButton.id;
   debounceRender(applyFilter(pictures));
@@ -68,8 +68,8 @@ const onFilterChange = (evt) => {
  */
 export const configFilter = (picturesData) => {
   pictures = picturesData;
-  filterBox?.classList.remove('img-filters--inactive');
-  filterBox?.addEventListener('click', onFilterChange);
+  filterBox.classList.remove('img-filters--inactive');
+  filterBox.addEventListener('click', onFilterChange);
 
   // Первичный рендер
   debounceRender(applyFilter(pictures));
