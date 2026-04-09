@@ -3,16 +3,6 @@ import { REMOVE_MESSAGE_TIMEOUT } from '../constants.js';
 const body = document.body;
 
 /**
- * Генератор ID
- * @param {number} [start = 1] - Начальное значение счетчика.
- * @returns {() => number} - Функция-счетчик увеличивает значение на 1 при каждом вызове.
-*/
-export const createIdGenerator = (start = 1) => {
-  let lastGenerateId = start;
-  return () => lastGenerateId++;
-};
-
-/**
  * Функция поиска шаблона в HTML-разметке по ID
  * Должен содержать только один дочерний элемент
  * @param {string} id - ID шаблона
@@ -21,13 +11,11 @@ export const createIdGenerator = (start = 1) => {
  */
 export const findTemplate = (id) => {
   const template = document.getElementById(id);
-
   if(!template || !(template instanceof HTMLTemplateElement)) {
     return null;
   }
 
   const firstChild = template.content.firstElementChild;
-
   if (!firstChild) {
     return null;
   }
