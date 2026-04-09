@@ -1,15 +1,6 @@
-const REMOVE_MESSAGE_TIMEOUT = 5000;
-const body = document.body;
+import { REMOVE_MESSAGE_TIMEOUT } from '../constants.js';
 
-/**
- * Генератор ID
- * @param {number} [start = 1] - Начальное значение счетчика.
- * @returns {() => number} - Функция-счетчик увеличивает значение на 1 при каждом вызове.
-*/
-export const createIdGenerator = (start = 1) => {
-  let lastGenerateId = start;
-  return () => lastGenerateId++;
-};
+const body = document.body;
 
 /**
  * Функция поиска шаблона в HTML-разметке по ID
@@ -20,13 +11,11 @@ export const createIdGenerator = (start = 1) => {
  */
 export const findTemplate = (id) => {
   const template = document.getElementById(id);
-
   if(!template || !(template instanceof HTMLTemplateElement)) {
     return null;
   }
 
   const firstChild = template.content.firstElementChild;
-
   if (!firstChild) {
     return null;
   }
@@ -93,4 +82,19 @@ export const showErrorMessage = (message) => {
   body.append(errorArea);
 
   setTimeout(errorRemover, REMOVE_MESSAGE_TIMEOUT);
+};
+
+/**
+ * Создаёт debounced-версию функции: выполняет колбэк только после паузы в вызовах
+ * @param {Function} callback - Функция-колбэк для отложенного выполнения
+ * @param {number} timeoutDelay - Задержка в миллисекундах перед вызовом
+ * @returns {Function} Новая функция
+ */
+export const debounce = (callback, timeoutDelay) => {
+  let timeoutId;
+
+  return (...args) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback(...args), timeoutDelay);
+  };
 };

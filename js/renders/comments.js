@@ -1,4 +1,5 @@
 import { renderGroup } from '../utils/utils.js';
+import { COMMENT_COUNT_STEP } from '../constants.js';
 
 /**
  * @typedef {Object} CommentData
@@ -7,7 +8,6 @@ import { renderGroup } from '../utils/utils.js';
  * @property {string} name - имя комментатора
  */
 
-const COUNT_STEP = 5;
 let currentComments = [];
 let currentCount = 0;
 
@@ -49,7 +49,7 @@ const renderNextComment = () => {
     return;
   }
 
-  const renderedComments = currentComments.slice(currentCount, currentCount + COUNT_STEP);
+  const renderedComments = currentComments.slice(currentCount, currentCount + COMMENT_COUNT_STEP);
   const renderedCommentsLength = renderedComments.length + currentCount;
 
   renderGroup(renderedComments, createPictureComment, commentsContainer);
@@ -61,7 +61,7 @@ const renderNextComment = () => {
     commentsLoader.classList.add('hidden');
   }
 
-  currentCount += COUNT_STEP;
+  currentCount += COMMENT_COUNT_STEP;
 };
 
 /**

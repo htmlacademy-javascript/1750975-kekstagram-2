@@ -1,19 +1,4 @@
-/** Базовый URL API сервера */
-const BASE_URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
-
-/**
- * Маршруты API эндпоинтов
- * @type {Object}
- */
-const Route = {
-  GET_DATA: '/data', // Получение списка фотографий
-  SEND_DATA: '/', // Отправка новой фотографии
-};
-
-const Method = {
-  GET: 'GET',
-  POST: 'POST',
-};
+import { BASE_URL, Route, Method } from '../constants.js';
 
 const ErrorText = {
   [Method.GET]: 'Не удалось загрузить данные. Попробуйте обновить страницу',
