@@ -1,4 +1,5 @@
-const REMOVE_MESSAGE_TIMEOUT = 5000;
+import { REMOVE_MESSAGE_TIMEOUT } from '../constants.js';
+
 const body = document.body;
 
 /**
@@ -103,6 +104,7 @@ export const showErrorMessage = (message) => {
  */
 export const debounce = (callback, timeoutDelay) => {
   let timeoutId;
+
   return (...args) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => callback.apply(this, args), timeoutDelay);

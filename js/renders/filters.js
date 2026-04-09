@@ -1,20 +1,6 @@
 import { renderThumbnails } from './thumbnails.js';
 import { debounce } from '../utils/utils.js';
-
-const FILTER = {
-  default: 'filter-default',
-  random: 'filter-random',
-  discussed: 'filter-discussed',
-};
-
-const SORTFUNC = {
-  random: () => 0.5 - Math.random(),
-  discussed: (a, b) => b.comments.length - a.comments.length,
-};
-
-const DEBOUNCE_DELAY = 500;
-const MAX_PICTURE_COUNT = 10;
-const ACTIVE_BUTTON_CLASS = 'img-filters__button--active';
+import { FILTER, SORTFUNC, DEBOUNCE_DELAY, MAX_PICTURE_COUNT, ACTIVE_BUTTON_CLASS } from '../constants.js';
 
 let pictures = [];
 let currentFilter = FILTER.default;

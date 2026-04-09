@@ -1,6 +1,5 @@
-const MAX_HASHTAGS = 5;
-const MAX_HASHTAG_LENGTH = 20;
-const MAX_COMMENT_LENGTH = 140;
+import { MAX_HASHTAGS, MAX_HASHTAG_LENGTH, MAX_COMMENT_LENGTH } from '../constants.js';
+
 const errorMessageComment = `Превышено допустимое количество символов в комментарии - ${MAX_COMMENT_LENGTH}`;
 
 /** @type {string} Сообщение об ошибке валидации хэштегов */
