@@ -1,6 +1,6 @@
 import { sendData } from '../utils/api.js';
 import { isEscapeKey, toggleModalClasses } from '../utils/modal-windows.js';
-import { findTemplate } from '../utils/utils.js';
+import { findTemplate, showErrorMessage } from '../utils/utils.js';
 import { appendNotification } from '../utils/notification-module.js';
 import { initScale, onEffectChange, resetScale, resetSlider } from './editor-effects-slider.js';
 import { createValidator } from './form-validation.js';
@@ -12,11 +12,22 @@ const editingModalResetButton = form.querySelector('.img-upload__cancel');
 const formSubmitButton = form.querySelector('.img-upload__submit');
 const effectsList = form.querySelector('.effects__list');
 const uploadFileControl = form.querySelector('.img-upload__input');
+const previewImage = form.querySelector('.img-upload__preview img');
 const hashtagInput = form.querySelector('.text__hashtags');
 const commentInput = form.querySelector('.text__description');
 
 const successTemplate = findTemplate('success');
 const errorTemplate = findTemplate('error');
+
+const allowedTypes = [
+  'image/jpeg',
+  'image/png',
+  'image/avif',
+  'image/webp',
+  'image/svg+xml',
+  'image/gif',
+  'image/x-icon'
+];
 
 let validator = null;
 
@@ -28,6 +39,10 @@ const resetFormState = () => {
   resetScale();
   resetSlider();
   form.reset();
+
+  if (previewImage) {
+    previewImage.src = '';
+  }
 };
 
 effectsList.addEventListener('change', onEffectChange);
@@ -79,6 +94,11 @@ function onEscapeKeydown (evt) {
 form.addEventListener('reset', () => {
   toggleModalClasses(editingModal, false);
   document.removeEventListener('keydown', onEscapeKeydown);
+
+  if (previewImage.src && previewImage.src.startsWith('blob:')) {
+    URL.revokeObjectURL(previewImage.src);
+    previewImage.src = '';
+  }
 });
 
 /**
@@ -137,8 +157,23 @@ function closePictureEditor () {
  * @param {Event} evt - Событие изменения файла
  * @returns {void}
 */
-const onUploadPictureChange = (evt) => {
-  evt.preventDefault();
+const onUploadPictureChange = () => {
+  const file = uploadFileControl.files[0];
+  if (!file) {
+    return;
+  }
+
+  if (!allowedTypes.includes(file.type)) {
+    showErrorMessage('Можно загружать только изображения');
+    uploadFileControl.value = '';
+    return;
+  }
+
+  const imageUrl = URL.createObjectURL(file);
+  if (previewImage) {
+    previewImage.src = imageUrl;
+  }
+
   toggleModalClasses(editingModal, true);
   initScale();
 
