@@ -20,9 +20,9 @@ const createThumbnail = ({id, url, description, likes, comments}) => {
 
   /** @type {HTMLAnchorElement} */
   const thumbnail = thumbnailTemplate.cloneNode(true);
+  const image = thumbnail.querySelector('.picture__img');
   const pictureComments = thumbnail.querySelector('.picture__comments');
   const pictureLikes = thumbnail.querySelector('.picture__likes');
-  const image = thumbnail.querySelector('.picture__img');
 
   thumbnail.href = url;
   thumbnail.dataset.id = String(id);

@@ -16,6 +16,7 @@ const ErrorText = {
  */
 const load = async (route, method = Method.GET, body = null) => {
   const response = await fetch(`${BASE_URL}${route}`, { method, body });
+
   return response.ok ? response.json()
     : Promise.reject({ message: ErrorText[method], status: response.status });
 };

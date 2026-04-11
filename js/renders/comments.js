@@ -54,7 +54,7 @@ const renderNextComment = () => {
 
   renderGroup(renderedComments, createPictureComment, commentsContainer);
 
-  commentsShownCounter.textContent = `${renderedCommentsLength} `;
+  commentsShownCounter.textContent = `${renderedCommentsLength}`;
   commentsTotalCounter.textContent = currentComments.length;
 
   if (renderedCommentsLength >= currentComments.length) {
