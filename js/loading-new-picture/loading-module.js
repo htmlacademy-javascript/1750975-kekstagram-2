@@ -13,6 +13,7 @@ const formSubmitButton = form.querySelector('.img-upload__submit');
 const effectsList = form.querySelector('.effects__list');
 const uploadFileControl = form.querySelector('.img-upload__input');
 const previewImage = form.querySelector('.img-upload__preview img');
+const effectsPreview = document.querySelectorAll('.effects__preview');
 const hashtagInput = form.querySelector('.text__hashtags');
 const commentInput = form.querySelector('.text__description');
 
@@ -38,7 +39,11 @@ let validator = null;
 const resetFormState = () => {
   resetScale();
   resetSlider();
-  form.reset();
+  if (validator) {
+    validator.resetValidation();
+  } else {
+    form.reset();
+  }
 
   if (previewImage) {
     previewImage.src = '';
@@ -172,6 +177,10 @@ const onUploadPictureChange = () => {
   const imageUrl = URL.createObjectURL(file);
   if (previewImage) {
     previewImage.src = imageUrl;
+
+    effectsPreview.forEach((item) => {
+      item.style.backgroundImage = `url(${imageUrl})`;
+    });
   }
 
   toggleModalClasses(editingModal, true);

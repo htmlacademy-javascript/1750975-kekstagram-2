@@ -36,6 +36,9 @@ const validateHashtag = (value) => {
       break;
     }
 
+    // eslint-disable-next-line no-console
+    console.log(tag);
+
     if (tag === '#') {
       errorMessage = 'Хэштег не может состоять только из символа \'#\'';
       hasError = true;
@@ -103,7 +106,7 @@ export const createValidator = (form) => {
    * @type {Pristine}
    */
   const pristine = new Pristine(form, {
-    classTo: 'img-upload__form',
+    classTo: 'img-upload__field-wrapper',
     errorTextParent: 'img-upload__field-wrapper',
     errorTextClass: 'img-upload__field-wrapper--error',
   });

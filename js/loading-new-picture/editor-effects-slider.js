@@ -81,7 +81,7 @@ export const initEffectSlider = () => {
   });
 
   effectLevelSlider.noUiSlider.on('update', () => {
-    effectLevelValue.value = effectLevelSlider.noUiSlider.get();
+    effectLevelValue.value = String(Number(effectLevelSlider.noUiSlider.get()));
     previewPicture.style.filter = EFFECTS[currentEffect]?.style(effectLevelValue.value) ?? 'none';
   });
 };
