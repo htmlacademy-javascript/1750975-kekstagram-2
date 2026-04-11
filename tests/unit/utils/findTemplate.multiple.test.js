@@ -24,10 +24,8 @@ describe('Should findTemplate function return the first child element of the tem
     template.content.appendChild(secondChild);
     document.body.appendChild(template);
 
-    // WHEN
     const multipleTemplate = findTemplate('multiple-children');
 
-    // THEN
     expect(multipleTemplate).toBe(firstChild);
   });
 });

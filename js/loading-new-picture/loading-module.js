@@ -39,6 +39,7 @@ let validator = null;
 const resetFormState = () => {
   resetScale();
   resetSlider();
+
   if (validator) {
     validator.resetValidation();
   } else {
@@ -114,6 +115,7 @@ form.addEventListener('reset', () => {
 */
 const sendFormData = async (formElement) => {
   const isValid = validator.validate();
+
   if (!isValid) {
     return;
   }
@@ -128,7 +130,7 @@ const sendFormData = async (formElement) => {
 
   try {
     await sendData(new FormData(formElement));
-    appendNotification(successTemplate, () => resetFormState(form));
+    appendNotification(successTemplate, () => resetFormState());
   } catch (error) {
     appendNotification(errorTemplate);
   } finally {
@@ -159,11 +161,11 @@ function closePictureEditor () {
 
 /**
  * Обработчик выбора файла - открывает модальное окно редактирования изображения
- * @param {Event} evt - Событие изменения файла
  * @returns {void}
-*/
+ */
 const onUploadPictureChange = () => {
   const file = uploadFileControl.files[0];
+
   if (!file) {
     return;
   }
@@ -175,6 +177,7 @@ const onUploadPictureChange = () => {
   }
 
   const imageUrl = URL.createObjectURL(file);
+
   if (previewImage) {
     previewImage.src = imageUrl;
 

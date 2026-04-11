@@ -11,11 +11,13 @@ const body = document.body;
  */
 export const findTemplate = (id) => {
   const template = document.getElementById(id);
+
   if(!template || !(template instanceof HTMLTemplateElement)) {
     return null;
   }
 
   const firstChild = template.content.firstElementChild;
+
   if (!firstChild) {
     return null;
   }
@@ -63,6 +65,7 @@ const errorLoadDataTemplate = findTemplate('data-error');
  */
 const errorRemover = () => {
   const errorLoadDataArea = body.querySelector('.data-error');
+
   if (errorLoadDataArea) {
     errorLoadDataArea.remove();
   }
@@ -75,6 +78,7 @@ const errorRemover = () => {
  */
 export const showErrorMessage = (message) => {
   const errorArea = errorLoadDataTemplate.cloneNode(true);
+
   if (message) {
     errorArea.querySelector('.data-error__title').textContent = message;
   }
