@@ -36,9 +36,6 @@ const validateHashtag = (value) => {
       break;
     }
 
-    // eslint-disable-next-line no-console
-    console.log(tag);
-
     if (tag === '#') {
       errorMessage = 'Хэштег не может состоять только из символа \'#\'';
       hasError = true;
