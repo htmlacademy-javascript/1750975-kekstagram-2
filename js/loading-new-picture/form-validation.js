@@ -80,6 +80,7 @@ export const validateCommentLength = (value) => {
   if (!value) {
     return true; // комментарий не обязателен
   }
+
   return value.length <= MAX_COMMENT_LENGTH;
 };
 
