@@ -19,6 +19,11 @@ function onEscapeKeydown (evt) {
   }
 }
 
+// Обработчик клика на кнопке закрытия модального окна
+const onPictureCloseBtnClick = () => {
+  closePicture();
+};
+
 /**
  * Закрывает модальное окно с полноразмерной фотографией
  * @returns {void}
@@ -29,7 +34,7 @@ function closePicture () {
   pictureElement.classList.add('hidden');
   document.body.classList.remove('modal-open');
 
-  pictureCloseBtn.removeEventListener('click', closePicture);
+  pictureCloseBtn.removeEventListener('click', onPictureCloseBtnClick);
   document.removeEventListener('keydown', onEscapeKeydown);
 }
 
@@ -54,6 +59,6 @@ export const openPicture = (pictureId) => {
   pictureElement.classList.remove('hidden');
   document.body.classList.add('modal-open');
 
-  pictureCloseBtn.addEventListener('click', closePicture);
+  pictureCloseBtn.addEventListener('click', onPictureCloseBtnClick);
   document.addEventListener('keydown', onEscapeKeydown);
 };

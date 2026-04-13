@@ -27,11 +27,11 @@ const debounceRender = debounce(renderWithClear, DEBOUNCE_DELAY);
  */
 const applyFilter = (picturesData) => {
   if (currentFilter === FILTER.random) {
-    return picturesData.toSorted(SORTFUNC.random).slice(0, MAX_PICTURE_COUNT);
+    return picturesData.toSorted(SORTFUNC.sortRandom).slice(0, MAX_PICTURE_COUNT);
   }
 
   if (currentFilter === FILTER.discussed) {
-    return picturesData.toSorted(SORTFUNC.discussed);
+    return picturesData.toSorted(SORTFUNC.sortDiscussed);
   }
 
   return picturesData;
@@ -66,7 +66,7 @@ const onFilterChange = (evt) => {
  * Инициализирует фильтры после загрузки данных с сервера,
  * @param picturesData - Массив фотографий с сервера
  */
-export const configFilter = (picturesData) => {
+export const initFilter = (picturesData) => {
   pictures = picturesData;
   filterBox.classList.remove('img-filters--inactive');
   filterBox.addEventListener('click', onFilterChange);
