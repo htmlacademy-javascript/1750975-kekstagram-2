@@ -1,5 +1,5 @@
 import { getData } from './utils/api.js';
-import { configFilter } from './renders/filters.js';
+import { initFilter } from './renders/filters.js';
 import { initUploadModal } from './loading-new-picture/loading-module.js';
 import { showErrorMessage } from './utils/utils.js';
 import { initEffectSlider } from './loading-new-picture/editor-effects-slider.js';
@@ -15,7 +15,7 @@ const initApp = async () => {
     initUploadModal();
     initEffectSlider();
     const picturesData = await getData(); // Загрузка реальных данных
-    configFilter(picturesData); // ← Фильтры + первичный рендер
+    initFilter(picturesData); // ← Фильтры + первичный рендер
   } catch (error) {
     showErrorMessage(error.message);
   }

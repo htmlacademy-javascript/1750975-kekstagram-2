@@ -9,7 +9,7 @@ let errorMessage = '';
  * Возвращает текущее сообщение об ошибке валидации хэштегов
  * @returns {string}
  */
-export const error = () => errorMessage;
+export const getCurrentError = () => errorMessage;
 
 /**
  * Функция проверки корректности строки с хэштегами,
@@ -110,7 +110,7 @@ export const createValidator = (form) => {
   });
 
   const addValidators = (hashtagInput, commentInput) => {
-    pristine.addValidator(hashtagInput, validateHashtag, error, 1, false);
+    pristine.addValidator(hashtagInput, validateHashtag, getCurrentError, 1, false);
     pristine.addValidator(commentInput, validateCommentLength, errorMessageComment, 2, false);
 
     commentInput.addEventListener('input', () => pristine.validate());

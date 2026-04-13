@@ -5,6 +5,7 @@ const previewPicture = uploadPictureContainer.querySelector('.img-upload__previe
 const smallerButton = uploadPictureContainer.querySelector('.scale__control--smaller');
 const biggerButton = uploadPictureContainer.querySelector('.scale__control--bigger');
 const scaleValue = uploadPictureContainer.querySelector('.scale__control--value');
+const uploadPictureControl = uploadPictureContainer.querySelector('.img-upload__input ');
 const effectLevelValue = uploadPictureContainer.querySelector('.effect-level__value');
 const effectLevel = uploadPictureContainer.querySelector('.img-upload__effect-level');
 const effectLevelSlider = uploadPictureContainer.querySelector('.effect-level__slider');
@@ -64,6 +65,11 @@ export const initScale = () => {
  * @returns {void}
  */
 export const resetScale = () => {
+  previewPicture.style.transform = 'scale(1)';
+  percent = 100;
+  scaleValue.value = '100%';
+  uploadPictureControl.value = '';
+
   smallerButton.removeEventListener('click', onSmallerButtonClick);
   biggerButton.removeEventListener('click', onBiggerButtonClick);
 };

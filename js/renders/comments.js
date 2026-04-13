@@ -39,12 +39,14 @@ const createPictureComment = ({avatar, message, name}) => {
 };
 
 /**
- * Отрисовывает следующую порцию комментариев (один шаг),
+ * Обработчик клика по кнопке загрузки комментариев,
+ * отрисовывает следующую порцию комментариев (один шаг),
  * добавляет в DOM количество комментариев, равное COUNT_STEP,
  * обновляет счетчики и прячет кнопку загрузки, если все комментарии показаны
+ * @param {MouseEvent} evt - событие клика по кнопке загрузки
  * @returns {void}
 */
-const renderNextComment = () => {
+const onCommentsLoaderClick = () => {
   if (currentComments.length === 0) {
     return;
   }
@@ -73,9 +75,9 @@ const renderNextComment = () => {
  */
 export const renderComments = (comments) => {
   currentComments = Array.isArray(comments) ? comments : [];
-  renderNextComment();
+  onCommentsLoaderClick(null); // рендерим первую порцию
 
-  commentsLoader.addEventListener('click', renderNextComment);
+  commentsLoader.addEventListener('click', onCommentsLoaderClick);
 };
 
 /**
@@ -91,5 +93,5 @@ export const clearComments = () => {
   commentsContainer.innerHTML = '';
   commentsLoader.classList.remove('hidden');
 
-  commentsLoader.removeEventListener('click', renderNextComment);
+  commentsLoader.removeEventListener('click', onCommentsLoaderClick);
 };

@@ -64,8 +64,8 @@ export const FILTER = {
  * @constant @type {Object.<string, function>}
  */
 export const SORTFUNC = {
-  random: () => 0.5 - Math.random(),
-  discussed: (a, b) => b.comments.length - a.comments.length,
+  sortRandom: () => 0.5 - Math.random(),
+  sortDiscussed: (a, b) => b.comments.length - a.comments.length,
 };
 
 /** @constant @type {number} Максимум фото в случайном фильтре */

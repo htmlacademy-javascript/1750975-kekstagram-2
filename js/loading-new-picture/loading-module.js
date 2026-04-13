@@ -32,25 +32,10 @@ const allowedTypes = [
 
 let validator = null;
 
-/**
- * Полностью сбрасывает состояние формы редактирования изображения
- * @returns {void}
- */
-const resetFormState = () => {
-  resetScale();
-  resetSlider();
+// Сохраняем исходное состояние preview или null, если изначально пусто
+const originalPreviewSrc = previewImage.src || null;
 
-  if (validator) {
-    validator.resetValidation();
-  } else {
-    form.reset();
-  }
-
-  if (previewImage) {
-    previewImage.src = '';
-  }
-};
-
+// Обработчик изменения эффекта на списке эффектов
 effectsList.addEventListener('change', onEffectChange);
 
 /**
@@ -95,16 +80,52 @@ function onEscapeKeydown (evt) {
 }
 
 /**
- * Обработчик сброса формы - закрывает модальное окно
+ * Сбрасывает blob-URL и превью эффектов для изображения
+ * @returns {void}
+ */
+const resetImagePreview = () => {
+  if (!previewImage) {
+    return;
+  }
+
+  if (previewImage.src && previewImage.src.startsWith('blob:')) {
+    URL.revokeObjectURL(previewImage.src);
+  }
+
+  previewImage.src = originalPreviewSrc || '';
+
+  effectsPreview.forEach((item) => {
+    item.style.backgroundImage = '';
+  });
+};
+
+/**
+ * Полностью сбрасывает состояние формы редактирования изображения,
+ * включая изображение и превью эффектов
+ * @returns {void}
+ */
+const resetFormState = () => {
+  resetScale();
+  resetSlider();
+
+  if (validator) {
+    validator.resetValidation();
+  } else {
+    form.reset();
+  }
+
+  resetImagePreview();
+};
+
+/**
+ * Обработчик сброса формы - закрывает модальное окно редактирования,
+ * убирает остатки загруженного изображения
  */
 form.addEventListener('reset', () => {
   toggleModalClasses(editingModal, false);
   document.removeEventListener('keydown', onEscapeKeydown);
 
-  if (previewImage.src && previewImage.src.startsWith('blob:')) {
-    URL.revokeObjectURL(previewImage.src);
-    previewImage.src = '';
-  }
+  resetImagePreview();
 });
 
 /**
@@ -148,6 +169,16 @@ const onFormSubmit = (evt) => {
 };
 
 /**
+ * Обработчик клика по кнопке закрытия модального окна редактирования изображения
+ * @param {MouseEvent} evt - событие клика
+ * @returns {void}
+ */
+function onEditingModalResetButtonClick(evt) {
+  evt.preventDefault();
+  closePictureEditor();
+}
+
+/**
  * Закрывает форму редактирования изображения
  * @returns {void}
 */
@@ -155,7 +186,7 @@ function closePictureEditor () {
   toggleModalClasses(editingModal, false);
   resetFormState();
 
-  editingModalResetButton.removeEventListener('click', closePictureEditor);
+  editingModalResetButton.removeEventListener('click', onEditingModalResetButtonClick);
   document.removeEventListener('keydown', onEscapeKeydown);
 }
 
@@ -179,6 +210,10 @@ const onUploadPictureChange = () => {
   const imageUrl = URL.createObjectURL(file);
 
   if (previewImage) {
+    if (previewImage.src && previewImage.src.startsWith('blob:')) {
+      URL.revokeObjectURL(previewImage.src);
+    }
+
     previewImage.src = imageUrl;
 
     effectsPreview.forEach((item) => {
@@ -189,7 +224,7 @@ const onUploadPictureChange = () => {
   toggleModalClasses(editingModal, true);
   initScale();
 
-  editingModalResetButton.addEventListener('click', closePictureEditor);
+  editingModalResetButton.addEventListener('click', onEditingModalResetButtonClick);
   document.addEventListener('keydown', onEscapeKeydown);
 };
 
